@@ -5,6 +5,7 @@ use Magecomp\Imageclean\Model\ImagecleanFactory;
 use Magento\Framework\App\Helper\AbstractHelper;
 use Magento\Framework\App\Helper\Context;
 use Magento\Framework\DB\Exception;
+use Magento\Framework\Filesystem\DirectoryList;
 
 class Data extends AbstractHelper {
     /**
@@ -12,11 +13,29 @@ class Data extends AbstractHelper {
      */
     protected $_modelImagecleanFactory;
 
+    /**
+     * @var DirectoryList
+     */
+    protected $directoryList;
 
-    public function __construct(Context $context, 
-        ImagecleanFactory $modelImagecleanFactory)
+    /**
+     * @var string
+     */
+    protected $mainPath = '';
+
+    /**
+     * @param Context $context
+     * @param ImagecleanFactory $modelImagecleanFactory
+     * @param DirectoryList $directoryList
+     */
+    public function __construct(
+        Context $context,
+        ImagecleanFactory $modelImagecleanFactory,
+        DirectoryList $directoryList
+    )
     {
         $this->_modelImagecleanFactory = $modelImagecleanFactory;
+        $this->directoryList = $directoryList;
         parent::__construct($context);
     }
 
@@ -27,6 +46,9 @@ class Data extends AbstractHelper {
 
     public function listDirectories($path) 
 	{
+        if ($this->mainPath == ''){
+            $this->mainPath = $path;
+        }
         if (is_dir($path)) 
 		{
             if ($dir = opendir($path)) 
@@ -41,7 +63,8 @@ class Data extends AbstractHelper {
                         } 
 						elseif (!in_array($entry, ['cache', 'watermark']) && (strpos($entry, '.') != 0)) 
 						{
-                            $this->result[] = substr($path.DIRECTORY_SEPARATOR.$entry,25);
+                            //$this->result[] = substr($path.DIRECTORY_SEPARATOR.$entry,25);
+                            $this->result[] = str_replace($this->mainPath, '', $path.DIRECTORY_SEPARATOR.$entry);
                         }
                     }
                 }
@@ -54,7 +77,8 @@ class Data extends AbstractHelper {
     public function compareList() 
 	{
         $valores = $this->_modelImagecleanFactory->create()->getCollection()->getImages();
-        $pepe = 'pub'.DIRECTORY_SEPARATOR.'media'.DIRECTORY_SEPARATOR.'catalog'.DIRECTORY_SEPARATOR.'product';
+        //$pepe = 'pub'.DIRECTORY_SEPARATOR.'media'.DIRECTORY_SEPARATOR.'catalog'.DIRECTORY_SEPARATOR.'product';
+        $pepe = $this->directoryList->getPath('pub').DIRECTORY_SEPARATOR.'media'.DIRECTORY_SEPARATOR.'catalog'.DIRECTORY_SEPARATOR.'product';
         $leer = $this->listDirectories($pepe);
         $model = $this->_modelImagecleanFactory->create();
         foreach ($leer as $item) 
