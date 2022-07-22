@@ -28,6 +28,13 @@ class Collection extends AbstractCollection
         $this->_init('Magecomp\Imageclean\Model\Imageclean','Magecomp\Imageclean\Model\ResourceModel\Imageclean');
     }
 
+    protected function _initSelect()
+    {
+        $this->addFilterToMap('imagename', 'main_table.filename');
+
+        parent::_initSelect();
+    }
+
     public function getImages() 
 	{
 		$array = [];
