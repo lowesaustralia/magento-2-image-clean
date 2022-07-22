@@ -35,20 +35,27 @@ class Thumbnail extends Column
         if(isset($dataSource['data']['items']))
 		{
             $fieldName = $this->getData('name');
-            foreach($dataSource['data']['items'] as & $item) 
-			{
-                $url = '';
-                if($item[$fieldName] != '') 
-				{
-                    $url = $item[$fieldName];
+            if ($fieldName == 'filename') {
+                foreach($dataSource['data']['items'] as & $item)
+                {
+                    $url = '';
+                    if($item[$fieldName] != '')
+                    {
+                        $url = $item[$fieldName];
+                    }
+                    $item[$fieldName . '_src'] = $mediaUrl."catalog/product".$url;
+                    $item[$fieldName . '_alt'] = $this->getAlt($item) ?: '';
+                    $item[$fieldName . '_link'] = $this->urlBuilder->getUrl(
+                        'imageclean/imageclean/index',
+                        ['id' => $item['imageclean_id']]
+                    );
+                    $item[$fieldName . '_orig_src'] = $url;
                 }
-                $item[$fieldName . '_src'] = $mediaUrl."catalog/product".$url;
-                $item[$fieldName . '_alt'] = $this->getAlt($item) ?: '';
-                $item[$fieldName . '_link'] = $this->urlBuilder->getUrl(
-                    'imageclean/imageclean/index',
-                    ['id' => $item['imageclean_id']]
-                );
-                $item[$fieldName . '_orig_src'] = $url;
+            } elseif ($fieldName == 'imagename') {
+                foreach($dataSource['data']['items'] as & $item)
+                {
+                    $item['imagename'] = $item['filename'];
+                }
             }
         }
 

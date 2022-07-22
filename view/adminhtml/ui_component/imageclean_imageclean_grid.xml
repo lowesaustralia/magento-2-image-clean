@@ -123,6 +123,12 @@
 				</item>
 			</argument>
 		</column>
+        <column name="imagename" class="Magecomp\Imageclean\Ui\Component\Listing\Column\Thumbnail">
+            <settings>
+                <filter>text</filter>
+                <label translate="true">Image Name</label>
+            </settings>
+        </column>
 		<actionsColumn name="actions" class="Magecomp\Imageclean\Ui\Component\Listing\Column\Deleteimage">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
