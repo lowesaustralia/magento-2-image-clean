@@ -1,7 +1,20 @@
 <?xml version="1.0"?>
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
-   
-  <type name="Magecomp\Imageclean\Model\ResourceModel\Imageclean\Grid\Collection">
+    <type name="Magecomp\Imageclean\Logger\Handler">
+        <arguments>
+            <argument name="filesystem" xsi:type="object">Magento\Framework\Filesystem\Driver\File</argument>
+        </arguments>
+    </type>
+    <type name="Magecomp\Imageclean\Logger\Logger">
+        <arguments>
+            <argument name="name" xsi:type="string">Magecomp Imageclean Logger</argument>
+            <argument name="handlers" xsi:type="array">
+                <item name="system" xsi:type="object">Magecomp\Imageclean\Logger\Handler</item>
+            </argument>
+        </arguments>
+    </type>
+
+    <type name="Magecomp\Imageclean\Model\ResourceModel\Imageclean\Grid\Collection">
 	  <arguments>
 		  <argument name="mainTable" xsi:type="string">imageclean</argument>
 		  <argument name="eventPrefix" xsi:type="string">imageclean_imageclean_grid_collection</argument>
@@ -9,12 +22,12 @@
 		  <argument name="resourceModel" xsi:type="string">Magecomp\Imageclean\Model\ResourceModel\Imageclean</argument>
 	  </arguments>
     </type>
-  
+
   <type name="Magento\Framework\View\Element\UiComponent\DataProvider\CollectionFactory">
         <arguments>
 		  <argument name="collections" xsi:type="array">
 			  <item name="imageclean_imageclean_grid_data_source" xsi:type="string">Magecomp\Imageclean\Model\ResourceModel\Imageclean\Grid\Collection</item>
 		  </argument>
 	  </arguments>
-  </type>  	
+  </type>
 </config>

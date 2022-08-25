@@ -1,8 +1,8 @@
 <?php
 
-namespace Magecomp\Imageclean\Controller\Adminhtml\Imageclean;
+namespace Magecomp\Imageclean\Controller\Adminhtml\Folders;
 
-class Folders extends \Magento\Backend\App\Action
+class Index extends \Magento\Backend\App\Action
 {
     protected $resultPageFactory;
 

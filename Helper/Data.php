@@ -2,6 +2,7 @@
 
 namespace Magecomp\Imageclean\Helper;
 
+use Magecomp\Imageclean\Logger\Logger;
 use Magecomp\Imageclean\Model\ImagecleanFactory;
 use Magento\Framework\App\Helper\AbstractHelper;
 use Magento\Framework\App\Helper\Context;
@@ -10,15 +11,9 @@ use Magento\Framework\Filesystem\DirectoryList;
 
 class Data extends AbstractHelper
 {
-    /**
-     * @var ImagecleanFactory
-     */
-    protected $_modelImagecleanFactory;
-
-    /**
-     * @var DirectoryList
-     */
-    protected $directoryList;
+    protected ImagecleanFactory $_modelImagecleanFactory;
+    protected DirectoryList $directoryList;
+    protected Logger $logger;
 
     /**
      * @var string
@@ -27,26 +22,36 @@ class Data extends AbstractHelper
 
     protected array $subFolders = [];
 
+    protected $result = [];
+    protected $_mainTable;
+    public $valdir = [];
+
     /**
      * @param Context $context
      * @param ImagecleanFactory $modelImagecleanFactory
      * @param DirectoryList $directoryList
+     * @param Logger $logger
      */
     public function __construct(
         Context           $context,
         ImagecleanFactory $modelImagecleanFactory,
-        DirectoryList     $directoryList
+        DirectoryList     $directoryList,
+        Logger            $logger
     )
     {
         $this->_modelImagecleanFactory = $modelImagecleanFactory;
         $this->directoryList = $directoryList;
+        $this->logger = $logger;
         parent::__construct($context);
     }
 
-
-    protected $result = [];
-    protected $_mainTable;
-    public $valdir = [];
+    /**
+     * @return Logger
+     */
+    public function getLogger()
+    {
+        return $this->logger;
+    }
 
     public function listDirectories($path)
     {
@@ -79,6 +84,8 @@ class Data extends AbstractHelper
                     if (preg_match('/^\./', $entry) != 1 && !in_array($entry, ['cache', 'watermark', 'placeholder', 'sftp_imports'])) {
                         $subFolder = $dirPath . DIRECTORY_SEPARATOR . $entry;
                         if (is_dir($subFolder)) {
+                            $this->logger->debug($subFolder);
+
                             $this->subFolders[$subFolder] = ['folder_path' => $subFolder]; //$subFolder;
                             $this->findSubFolders($subFolder);
                         }
