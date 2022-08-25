@@ -15,19 +15,29 @@
     </type>
 
     <type name="Magecomp\Imageclean\Model\ResourceModel\Imageclean\Grid\Collection">
-	  <arguments>
-		  <argument name="mainTable" xsi:type="string">imageclean</argument>
-		  <argument name="eventPrefix" xsi:type="string">imageclean_imageclean_grid_collection</argument>
-          <argument name="eventObject" xsi:type="string">imageclean_imageclean_grid_collection</argument>
-		  <argument name="resourceModel" xsi:type="string">Magecomp\Imageclean\Model\ResourceModel\Imageclean</argument>
-	  </arguments>
+        <arguments>
+            <argument name="mainTable" xsi:type="string">imageclean</argument>
+            <argument name="eventPrefix" xsi:type="string">imageclean_imageclean_grid_collection</argument>
+            <argument name="eventObject" xsi:type="string">imageclean_imageclean_grid_collection</argument>
+            <argument name="resourceModel" xsi:type="string">Magecomp\Imageclean\Model\ResourceModel\Imageclean</argument>
+        </arguments>
     </type>
 
-  <type name="Magento\Framework\View\Element\UiComponent\DataProvider\CollectionFactory">
+    <type name="Magecomp\Imageclean\Model\ResourceModel\Imagefolders\Grid\Collection">
         <arguments>
-		  <argument name="collections" xsi:type="array">
-			  <item name="imageclean_imageclean_grid_data_source" xsi:type="string">Magecomp\Imageclean\Model\ResourceModel\Imageclean\Grid\Collection</item>
-		  </argument>
-	  </arguments>
-  </type>
+            <argument name="mainTable" xsi:type="string">imageclean_folders</argument>
+            <argument name="eventPrefix" xsi:type="string">imageclean_imagefolders_grid_collection</argument>
+            <argument name="eventObject" xsi:type="string">imageclean_imagefolders_grid_collection</argument>
+            <argument name="resourceModel" xsi:type="string">Magecomp\Imageclean\Model\ResourceModel\Imagefolders</argument>
+        </arguments>
+    </type>
+
+    <type name="Magento\Framework\View\Element\UiComponent\DataProvider\CollectionFactory">
+        <arguments>
+            <argument name="collections" xsi:type="array">
+                <item name="imageclean_imageclean_grid_data_source" xsi:type="string">Magecomp\Imageclean\Model\ResourceModel\Imageclean\Grid\Collection</item>
+                <item name="imageclean_imagefolders_grid_data_source" xsi:type="string">Magecomp\Imageclean\Model\ResourceModel\Imagefolders\Grid\Collection</item>
+            </argument>
+        </arguments>
+    </type>
 </config>
