@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+<schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
+    <table name="imageclean" resource="default" engine="innodb" comment="imageclean">
+        <column xsi:type="int" name="imageclean_id" padding="10" unsigned="true" nullable="false" identity="true" comment="ID"/>
+        <column xsi:type="varchar" name="filename" nullable="false" length="255" comment="Filename"/>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="imageclean_id"/>
+        </constraint>
+        <constraint xsi:type="unique" referenceId="IMAGECLEAN_FILENAME">
+            <column name="filename"/>
+        </constraint>
+    </table>
+    <table name="imageclean_folders" resource="default" engine="innodb" comment="imageclean_folders">
+        <column xsi:type="int" name="folder_id" padding="10" unsigned="true" nullable="false" identity="true" comment="ID"/>
+        <column xsi:type="varchar" name="folder_path" nullable="false" length="255" comment="Folder Path"/>
+        <column xsi:type="tinyint" name="scaned" nullable="false" default="0" identity="false" comment="Is Scanned"/>
+        <column xsi:type="datetime" name="created_at" on_update="false" nullable="false" default="CURRENT_TIMESTAMP" comment="Record added date"/>
+        <column xsi:type="datetime" name="last_scan_date" nullable="true" comment="Last Scan Date"/>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="folder_id"/>
+        </constraint>
+        <constraint xsi:type="unique" referenceId="IMAGECLEAN_FOLDER_PATH">
+            <column name="folder_path"/>
+        </constraint>
+    </table>
+</schema>

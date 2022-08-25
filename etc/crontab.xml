@@ -1,0 +1,12 @@
+<?xml version="1.0" ?>
+
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Cron:etc/crontab.xsd">
+    <group id="default">
+        <job instance="Magecomp\Imageclean\Cron\ScanFolderPaths" method="execute" name="magecomp_imageclean_scan_folder_paths">
+            <schedule>0 3 * * *</schedule>
+        </job>
+        <job instance="Magecomp\Imageclean\Cron\ScanImages" method="execute" name="magecomp_imageclean_scan_images">
+            <schedule>0 4 * * *</schedule>
+        </job>
+    </group>
+</config>

@@ -1,0 +1,12 @@
+{
+    "imageclean": {
+        "column": {
+            "imageclean_id": true,
+            "filename": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "IMAGECLEAN_FILENAME": true
+        }
+    }
+}
