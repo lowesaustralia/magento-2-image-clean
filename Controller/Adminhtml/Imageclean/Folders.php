@@ -26,7 +26,7 @@ class Folders extends \Magento\Backend\App\Action
 
         return $resultPage;
     }
-	
+
 	protected function _isAllowed()
     {
 		return $this->_authorization->isAllowed('Magecomp_Imageclean::imageclean');

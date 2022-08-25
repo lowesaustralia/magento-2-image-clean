@@ -8,5 +8,18 @@
             "PRIMARY": true,
             "IMAGECLEAN_FILENAME": true
         }
+    },
+    "imageclean_folders": {
+        "column": {
+            "folder_id": true,
+            "folder_path": true,
+            "scaned": true,
+            "created_at": true,
+            "last_scan_date": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "IMAGECLEAN_FOLDERS_FOLDER_PATH": true
+        }
     }
 }
