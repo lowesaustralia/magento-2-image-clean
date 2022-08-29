@@ -17,6 +17,8 @@ use Magento\Framework\Stdlib\DateTime\DateTime;
 
 class Data extends AbstractHelper
 {
+    const XML_PATH_DEFAULT_MAGECOMP_IMAGE_CLEAN_MEDIA_PATH = 'magecomp/imageclean/media_path';
+
     protected array $subFolders = [];
     protected DateTime $dateTime;
     protected DirectoryList $directoryList;
@@ -75,11 +77,29 @@ class Data extends AbstractHelper
         return $this->logger;
     }
 
+    /**
+     * @return mixed
+     */
+    public function getProductImagesPath()
+    {
+        return $this->getSystemConfig(XML_PATH_DEFAULT_MAGECOMP_IMAGE_CLEAN_MEDIA_PATH);
+    }
+
+    /**
+     * @param $path
+     * @param $scopeCode
+     * @return mixed
+     */
+    public function getSystemConfig($path = '', $scopeCode = null)
+    {
+        return $this->scopeConfig->getValue($path, 'store', $scopeCode);
+    }
+
     public function findSubFolders($dirPath = '')
     {
-        if (is_dir($dirPath)) {
-            if ($dir = opendir($dirPath)) {
-                while (($entry = readdir($dir)) !== false) {
+        if (!empty($dirPath) && is_dir($dirPath)) {
+            if ($handle = opendir($dirPath)) {
+                while (($entry = readdir($handle)) !== false) {
                     if (preg_match('/^\./', $entry) != 1 && !in_array($entry, ['cache', 'watermark', 'placeholder', 'sftp_imports'])) {
                         $subFolder = $dirPath . DIRECTORY_SEPARATOR . $entry;
                         if (is_dir($subFolder)) {
@@ -90,7 +110,7 @@ class Data extends AbstractHelper
                         }
                     }
                 }
-                closedir($dir);
+                closedir($handle);
             }
         }
         return $this->subFolders;

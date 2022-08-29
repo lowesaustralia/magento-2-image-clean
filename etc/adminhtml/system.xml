@@ -1,0 +1,20 @@
+<?xml version="1.0" ?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+    <system>
+        <tab id="magecomp" sortOrder="1000" translate="label">
+            <label>magecomp</label>
+        </tab>
+        <section id="magecomp" showInDefault="1" showInStore="1" showInWebsite="1" sortOrder="10" translate="label">
+            <label>Magecomp Config</label>
+            <tab>magecomp</tab>
+            <resource>Magecomp_Imageclean::config_magecomp_imageclean</resource>
+            <group id="imageclean" showInDefault="1" showInStore="1" showInWebsite="1" sortOrder="10" translate="label">
+                <label>Image Clean Config</label>
+                <field id="media_path" showInDefault="1" showInStore="1" showInWebsite="1" sortOrder="10" translate="label comment" type="text">
+                    <label>Product images path</label>
+                    <comment><![CDATA[e.g. /var/www/shared/pub/media/catalog/product]]></comment>
+                </field>
+            </group>
+        </section>
+    </system>
+</config>
