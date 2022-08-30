@@ -1,55 +1,62 @@
 <?php
+
 namespace Magecomp\Imageclean\Controller\Adminhtml\Imageclean;
 
-use Magento\Framework\Controller\ResultFactory;
-use Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection;
-use Magento\Backend\App\Action\Context;
-use Magento\Ui\Component\MassAction\Filter;
-use Magecomp\Imageclean\Model\ResourceModel\Imageclean\CollectionFactory;
+use Magecomp\Imageclean\Helper\Data as ImageCleanHelper;
 use Magecomp\Imageclean\Model\ImagecleanFactory;
+use Magecomp\Imageclean\Model\ResourceModel\Imageclean\CollectionFactory;
+use Magento\Backend\App\Action\Context;
+use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\Filesystem\DirectoryList;
+use Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection;
+use Magento\Ui\Component\MassAction\Filter;
 
 class MassDelete extends \Magento\Backend\App\Action
 {
-    protected $filter;
-    protected $collectionFactory;
-    /**
-     * @var ImagecleanFactory
-     */
-    protected $_modelImagecleanFactory;
-    protected $directoryList;
+    protected CollectionFactory $collectionFactory;
+    protected DirectoryList $directoryList;
+    protected Filter $filter;
+    protected ImagecleanFactory $_modelImagecleanFactory;
+    protected ImageCleanHelper $imageCleanHelper;
 
-    public function __construct(Context $context, 
-        Filter $filter, 
+    /**
+     * @param CollectionFactory $collectionFactory
+     * @param Context $context
+     * @param DirectoryList $directoryList
+     * @param Filter $filter
+     * @param ImagecleanFactory $modelImagecleanFactory
+     * @param ImageCleanHelper $imageCleanHelper
+     */
+    public function __construct(
         CollectionFactory $collectionFactory,
-         ImagecleanFactory $modelImagecleanFactory,
-        DirectoryList $directoryList)
+        Context           $context,
+        DirectoryList     $directoryList,
+        Filter            $filter,
+        ImagecleanFactory $modelImagecleanFactory,
+        ImageCleanHelper  $imageCleanHelper
+    )
     {
-        
-        $this->filter = $filter;
-        $this->collectionFactory = $collectionFactory;
         $this->_modelImagecleanFactory = $modelImagecleanFactory;
+        $this->collectionFactory = $collectionFactory;
         $this->directoryList = $directoryList;
+        $this->filter = $filter;
+        $this->imageCleanHelper = $imageCleanHelper;
         parent::__construct($context);
     }
 
-    public function execute() 
+    public function execute()
     {
         $collection = $this->filter->getCollection($this->collectionFactory->create());
         $collectionSize = $collection->getSize();
-        $rootPath  =  $this->directoryList->getRoot();
-        $mediaPath = $rootPath.DIRECTORY_SEPARATOR.'pub'.DIRECTORY_SEPARATOR.'media'.DIRECTORY_SEPARATOR.'catalog'.DIRECTORY_SEPARATOR.'product';
-        foreach ($collection as $item) 
-        {
+        $mediaPath = $this->imageCleanHelper->getProductImagesPath();
+        foreach ($collection as $item) {
             try {
                 $model = $this->_modelImagecleanFactory->create();
                 $model->load($item->getImagecleanId());
                 $filename = $model->getFilename();
                 $item->delete();
                 unlink($mediaPath . $filename);
-            }
-            catch (\Exception $e)
-            {
+            } catch (\Exception $e) {
                 //$this->messageManager->addError($e->getMessage());
                 $this->_redirect('*/*/edit', ['id' => $item->getImagecleanId()]);
             }

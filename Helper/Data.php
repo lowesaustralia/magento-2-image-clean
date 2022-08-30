@@ -232,7 +232,7 @@ class Data extends AbstractHelper
     {
         $valores = $this->_modelImagecleanFactory->create()->getCollection()->getImages();
         if (empty($dirPath)) {
-            $dirPath = $this->directoryList->getPath('pub') . DIRECTORY_SEPARATOR . 'media' . DIRECTORY_SEPARATOR . 'catalog' . DIRECTORY_SEPARATOR . 'product';
+            $dirPath = $this->getProductImagesPath();
         }
         $leer = $this->listDirectories($dirPath);
         $model = $this->_modelImagecleanFactory->create();
