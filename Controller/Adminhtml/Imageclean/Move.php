@@ -7,7 +7,7 @@ use Magecomp\Imageclean\Model\ImagecleanFactory;
 use Magento\Backend\App\Action\Context;
 use Magento\Framework\Filesystem\DirectoryList;
 
-class Delete extends AbstractImageclean
+class Move extends AbstractImageclean
 {
     protected DirectoryList $directoryList;
     protected ImagecleanFactory $_modelImagecleanFactory;
@@ -41,8 +41,10 @@ class Delete extends AbstractImageclean
                 $model->load($this->getRequest()->getParam('id'));
                 $filename = $model->getFilename();
                 $model->setId($this->getRequest()->getParam('id'))->delete();
-                unlink($mediaPath . $filename);
-                $this->messageManager->addSuccess(__('Image was successfully deleted'));
+                $oldPath = $mediaPath . $filename;
+                $newPath = dirname($mediaPath) . DIRECTORY_SEPARATOR . 'tmp' . $filename;
+                $this->imageCleanHelper->renameFile($oldPath, $newPath);
+                $this->messageManager->addSuccess(__('Image was successfully moved'));
 
                 $this->_redirect('*/*/');
             } catch (\Exception $e) {

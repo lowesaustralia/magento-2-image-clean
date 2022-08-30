@@ -19,8 +19,8 @@
         <argument name="dataProvider" xsi:type="configurableObject">
             <argument name="class" xsi:type="string">Magento\Framework\View\Element\UiComponent\DataProvider\DataProvider</argument>
             <argument name="name" xsi:type="string">imageclean_imageclean_grid_data_source</argument>
-            <argument name="primaryFieldName" xsi:type="string">imageclean_id</argument>            
-            <argument name="requestFieldName" xsi:type="string">id</argument>            
+            <argument name="primaryFieldName" xsi:type="string">imageclean_id</argument>
+            <argument name="requestFieldName" xsi:type="string">id</argument>
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
                     <item name="component" xsi:type="string">Magento_Ui/js/grid/provider</item>
@@ -97,6 +97,19 @@
 					</item>
 				</argument>
 			</action>
+			<action name="move">
+				<argument name="data" xsi:type="array">
+					<item name="config" xsi:type="array">
+						<item name="type" xsi:type="string">move</item>
+						<item name="label" xsi:type="string" translate="true">Move to tmp</item>
+						<item name="url" xsi:type="url" path="*/*/massMove"/>
+						<item name="confirm" xsi:type="array">
+							<item name="title" xsi:type="string" translate="true">Move Image(s)</item>
+							<item name="message" xsi:type="string" translate="true">Are you sure you wan't to move selected items?</item>
+						</item>
+					</item>
+				</argument>
+			</action>
 		</massaction>
 		<paging name="listing_paging"/>
 	</listingToolbar>
@@ -129,17 +142,17 @@
                     <item name="filter" xsi:type="string">text</item>
                     <item name="align" xsi:type="string">left</item>
                     <item name="label" xsi:type="string" translate="true">Image Name</item>
-                    <item name="sortOrder" xsi:type="number">25</item>
+                    <item name="sortOrder" xsi:type="number">30</item>
                 </item>
             </argument>
         </column>
-		<actionsColumn name="actions" class="Magecomp\Imageclean\Ui\Component\Listing\Column\Deleteimage">
+		<actionsColumn name="actions" class="Magecomp\Imageclean\Ui\Component\Listing\Column\ImageActions">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
                     <item name="resizeEnabled" xsi:type="boolean">false</item>
                     <item name="resizeDefaultWidth" xsi:type="string">200</item>
                     <item name="indexField" xsi:type="string">imageclean_id</item>
-					<item name="sortOrder" xsi:type="number">30</item>
+					<item name="sortOrder" xsi:type="number">40</item>
                 </item>
             </argument>
         </actionsColumn>

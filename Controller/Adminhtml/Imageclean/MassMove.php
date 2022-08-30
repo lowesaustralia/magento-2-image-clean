@@ -11,7 +11,7 @@ use Magento\Framework\Filesystem\DirectoryList;
 use Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection;
 use Magento\Ui\Component\MassAction\Filter;
 
-class MassDelete extends \Magento\Backend\App\Action
+class MassMove extends \Magento\Backend\App\Action
 {
     protected CollectionFactory $collectionFactory;
     protected DirectoryList $directoryList;
@@ -49,14 +49,17 @@ class MassDelete extends \Magento\Backend\App\Action
         $collection = $this->filter->getCollection($this->collectionFactory->create());
         $collectionSize = $collection->getSize();
         $mediaPath = $this->imageCleanHelper->getProductImagesPath();
-        $i=0;
+        $i = 0;
         foreach ($collection as $item) {
             try {
                 $model = $this->_modelImagecleanFactory->create();
                 $model->load($item->getImagecleanId());
                 $filename = $model->getFilename();
                 $item->delete();
-                unlink($mediaPath . $filename);
+
+                $oldPath = $mediaPath . $filename;
+                $newPath = dirname($mediaPath) . DIRECTORY_SEPARATOR . 'tmp' . $filename;
+                $this->imageCleanHelper->renameFile($oldPath, $newPath);
             } catch (\Exception $e) {
                 if (!$i++) {
                     $this->messageManager->addError($e->getMessage());
@@ -65,11 +68,10 @@ class MassDelete extends \Magento\Backend\App\Action
             }
         }
 
-        $this->messageManager->addSuccess(__('A total of %1 image(s) have been deleted.', $collectionSize));
+        $this->messageManager->addSuccess(__('A total of %1 image(s) have been moved.', $collectionSize));
 
         /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
         $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
         return $resultRedirect->setPath('*/*/index');
-
     }
 }

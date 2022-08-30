@@ -251,4 +251,34 @@ class Data extends AbstractHelper
         }
     }
 
+    /**
+     * @param string $oldPath
+     * @param string $newPath
+     * @return bool
+     * @throws \Exception
+     */
+    public function renameFile($oldPath, $newPath)
+    {
+        if (empty($oldPath) || empty($newPath)) {
+            return false;
+        }
+
+        try {
+            $newDirPath = dirname($newPath);
+
+            if ($this->file->isExists($newDirPath)) {
+                $this->file->createDirectory($newDirPath);
+            }
+
+            if (!$this->file->isDirectory($newDirPath)) {
+                $this->file->createDirectory($newDirPath);
+            }
+
+            rename($oldPath, $newPath);
+        } catch (\Exception|\Magento\Framework\Exception\FileSystemException $e) {
+            throw new \Exception($e->getMessage());
+        }
+
+        return true;
+    }
 }
