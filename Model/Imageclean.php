@@ -10,11 +10,11 @@ class Imageclean extends AbstractModel implements \Magento\Framework\DataObject\
     const CACHE_TAG = 'iimageclean_id';
 
     public function __construct(
-        \Magento\Framework\Model\Context $context,
-        \Magento\Framework\Registry $registry,
+        \Magento\Framework\Model\Context                        $context,
+        \Magento\Framework\Registry                             $registry,
         \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
-        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
-        array $data = []
+        \Magento\Framework\Data\Collection\AbstractDb           $resourceCollection = null,
+        array                                                   $data = []
     )
     {
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
@@ -43,8 +43,30 @@ class Imageclean extends AbstractModel implements \Magento\Framework\DataObject\
     public function getUsedProductImages()
     {
         $images = [];
-        $table = $this->getResourceCollection()->getTable('catalog_product_entity_media_gallery');
-        $query = "SELECT distinct value FROM $table";
+        $galleryTable = $this->getResourceCollection()->getTable('catalog_product_entity_media_gallery');
+        $imagesTable = $this->getResourceCollection()->getTable('catalog_product_entity_varchar');
+        $eavTable = $this->getResourceCollection()->getTable('eav_attribute');
+
+        $query = "
+        SELECT DISTINCT `value` from (
+            SELECT
+                `value`
+            FROM $galleryTable
+                UNION ALL
+            SELECT
+                v.`value`
+            FROM
+                $imagesTable v
+            LEFT JOIN
+                    $eavTable e
+            ON
+                e.attribute_id=v.attribute_id
+            WHERE
+                e.attribute_code IN ('image', 'small_image', 'thumbnail', 'swatch_image', 'hoover')
+              AND v.`value` IS NOT NULL
+              AND v.`value` != ''
+        ) t ORDER BY `value`
+        ";
 
         $stmt = $this->getResourceCollection()->getConnection()->query($query);
         while ($row = $stmt->fetch()) {

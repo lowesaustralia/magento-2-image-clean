@@ -31,7 +31,7 @@ class Data extends AbstractHelper
 
     protected $_mainTable;
     protected $mainPath = '';
-    protected $mediaCatalogProductPath = '';
+    protected $productImagesPath = '';
     protected $result = [];
     public $valdir = [];
 
@@ -82,7 +82,10 @@ class Data extends AbstractHelper
      */
     public function getProductImagesPath()
     {
-        return $this->getSystemConfig(XML_PATH_DEFAULT_MAGECOMP_IMAGE_CLEAN_MEDIA_PATH);
+        if (empty($this->productImagesPath)) {
+            $this->productImagesPath = $this->getSystemConfig(self::XML_PATH_DEFAULT_MAGECOMP_IMAGE_CLEAN_MEDIA_PATH);
+        }
+        return $this->productImagesPath;
     }
 
     /**
@@ -123,16 +126,13 @@ class Data extends AbstractHelper
      */
     public function scanImages($path)
     {
-        if (empty($this->mediaCatalogProductPath)) {
-            $this->mediaCatalogProductPath = $this->filesystem->getDirectoryRead(DirectoryList::MEDIA)->getAbsolutePath() . 'catalog' . DIRECTORY_SEPARATOR . 'product';
-        }
         $images = [];
         if (is_dir($path)) {
             if ($handle = opendir($path)) {
                 while (($entry = readdir($handle)) !== false) {
                     if (preg_match('/^\./', $entry) != 1) {
                         if ($this->file->isFile($path . DIRECTORY_SEPARATOR . $entry)) {
-                            $images[] = str_replace($this->mediaCatalogProductPath, '', $path . DIRECTORY_SEPARATOR . $entry);
+                            $images[] = str_replace($this->getProductImagesPath(), '', $path . DIRECTORY_SEPARATOR . $entry);
                         }
                     }
                 }
