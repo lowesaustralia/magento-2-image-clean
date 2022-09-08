@@ -150,7 +150,9 @@ class Data extends AbstractHelper
         /** @var \Magecomp\Imageclean\Model\ResourceModel\Imagefolders\Collection $collection */
         $collection = $this->imageFoldersCollectionFactory->create();
         $collection->addFieldToFilter('scaned', 0)
-            ->setOrder('folder_id');
+            ->setOrder('folder_id')
+            ->setPageSize(1000)
+            ->setCurPage(1);
 
         /** @var \Magecomp\Imageclean\Model\Imagefolders $folder */
         foreach ($collection as $folder) {

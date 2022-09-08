@@ -6,7 +6,7 @@
             <schedule>0 3 * * *</schedule>
         </job>
         <job instance="Magecomp\Imageclean\Cron\ScanImages" method="execute" name="magecomp_imageclean_scan_images">
-            <schedule>0 4 * * *</schedule>
+            <schedule>50 * * * *</schedule>
         </job>
     </group>
 </config>
